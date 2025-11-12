@@ -76,8 +76,8 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
   if (isLoading || !settings) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 print:p-0 print:m-0 print:bg-white print:block print:h-auto overflow-y-auto">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl relative print:shadow-none print:w-full print:m-0 my-8">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4 print:p-0 print:m-0 print:bg-white print:block print:h-auto overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl relative print:shadow-none print:w-full print:m-0 my-4 sm:my-8 max-h-[90vh] overflow-y-auto">
         {/* Print styles */}
         <style type="text/css" media="print">
           {`
@@ -111,14 +111,31 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
         </button>
 
         {/* Invoice content */}
-        <div className="p-6 print:p-4">
+        <div className="p-4 sm:p-6 print:p-4">
           {/* Header */}
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">INVOICE</h1>
-            <p className="text-gray-900 font-medium">{settings.business.pharmacyName}</p>
-            <p className="text-gray-600">{settings.business.address}</p>
-            <p className="text-gray-600">Phone: {settings.business.phone}</p>
-            <p className="text-gray-600">Email: {settings.business.email}</p>
+          <div className="text-center mb-4 sm:mb-6">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">INVOICE</h1>
+            <p className="text-sm sm:text-base text-gray-900 font-medium">{settings.business.pharmacyName}</p>
+            <p className="text-xs sm:text-sm text-gray-600">{settings.business.address}</p>
+            <p className="text-xs sm:text-sm text-gray-600">Phone: {settings.business.phone}</p>
+            <p className="text-xs sm:text-sm text-gray-600">Email: {settings.business.email}</p>
+          </div>
+
+          {/* Print buttons - Top */}
+          <div className="flex justify-center gap-4 mb-6 print:hidden">
+            <button
+              onClick={handlePrint}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 text-sm"
+            >
+              <FaPrint /> Print Invoice
+            </button>
+            <button
+              onClick={handleThermalPrint}
+              disabled={isThermalPrinting}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+            >
+              <FaReceipt /> {isThermalPrinting ? 'Printing...' : 'Thermal Print'}
+            </button>
           </div>
 
           {/* Invoice details */}
@@ -133,7 +150,7 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
               <p className="text-gray-600">Invoice #: {settings.invoice.prefix || ''}{sale._id}</p>
               <p className="text-gray-600">Date: {formatDateTime(sale.createdAt, settings)}</p>
               <p className="text-gray-600">Payment Method: {sale.paymentMethod}</p>
-              <p className="text-gray-600">Processed by: {sale.processedBy.name}</p>
+              <p className="text-gray-600">Processed by: {sale.processedBy?.name || 'Unknown'}</p>
             </div>
           </div>
 

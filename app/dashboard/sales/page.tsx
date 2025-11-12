@@ -153,10 +153,11 @@ export default function SalesPage() {
         const response = await fetch('/api/customers');
         if (response.ok) {
           const data = await response.json();
-          setCustomers(data.data);
+          setCustomers(data.data || []);
         }
       } catch (error) {
         console.error('Error fetching customers:', error);
+        setCustomers([]);
       }
     };
     
@@ -1045,29 +1046,10 @@ export default function SalesPage() {
               }}
               className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            
-            {/* Selected Customer Display */}
-            {customerDetails.name && !showCustomerDropdown && (
-              <div className="mt-2 p-2 bg-white border rounded-md text-sm">
-                <div className="font-medium">{customerDetails.name}</div>
-                {customerDetails.phone && (
-                  <div className="text-gray-500">{customerDetails.phone}</div>
-                )}
-            <button 
-                  onClick={() => {
-                    setCustomerDetails({ name: '', phone: '', email: '' });
-                    setCustomerSearchQuery('');
-                  }}
-                  className="text-xs text-red-600 hover:text-red-700 mt-1"
-                >
-                  Remove Customer
-            </button>
-          </div>
-            )}
 
             {/* Dropdown */}
             {showCustomerDropdown && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border rounded-md shadow-lg z-10 max-h-48 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border rounded-md shadow-lg z-50 max-h-48 overflow-y-auto">
                 {/* Existing customers */}
                 {customers
                   .filter(customer => 
@@ -1084,7 +1066,7 @@ export default function SalesPage() {
                           phone: customer.phone,
                           email: customer.email
                         });
-                        setCustomerSearchQuery(customer.name);
+                        setCustomerSearchQuery(`${customer.name} (${customer.phone})`);
                         setShowCustomerDropdown(false);
                       }}
                       className="p-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0"

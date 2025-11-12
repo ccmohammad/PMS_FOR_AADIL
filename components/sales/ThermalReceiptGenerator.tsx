@@ -80,7 +80,7 @@ export class ThermalReceiptGenerator {
       receipt += `Phone: ${this.sale.customer.phone}\n`;
     }
     
-    receipt += `Cashier: ${this.sale.processedBy.name}\n`;
+    receipt += `Cashier: ${this.sale.processedBy?.name || 'Unknown'}\n`;
     receipt += this.printLine();
     
     // Items header

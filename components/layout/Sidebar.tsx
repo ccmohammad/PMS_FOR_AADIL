@@ -39,13 +39,13 @@ const NavItem = ({ href, label, icon, isActive, isCollapsed, onlyAdmin, userRole
   if (onlyAdmin && userRole !== 'admin') return null;
 
   return (
-    <Link 
+    <Link
       href={href}
       className={`flex items-center p-3 ${isCollapsed ? 'justify-center' : 'px-4'} rounded-xl ${
-        isActive 
-          ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-500/20' 
+        isActive
+          ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-500/20 hover:text-white'
           : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
-      } transition-all duration-300 ease-in-out transform hover:scale-[1.02]`}
+      } transition-all duration-300 ease-in-out ${!isActive ? 'transform hover:scale-[1.02]' : ''}`}
     >
       <span className={`text-xl transition-transform duration-300 ${isActive ? 'transform scale-110' : ''}`}>{icon}</span>
       {!isCollapsed && <span className="ml-3 font-medium">{label}</span>}

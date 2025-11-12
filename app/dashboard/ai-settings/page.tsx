@@ -53,16 +53,11 @@ export default function AISettingsPage() {
           interactionSeverityThreshold: data.settings.interactionSeverityThreshold || 'moderate'
         };
         
-        console.log('AI Settings: Raw data from API:', data.settings);
-        console.log('AI Settings: enableMedicationSubstitution from API:', data.settings.enableMedicationSubstitution);
-        console.log('AI Settings: Processed settings:', loadedSettings);
-        console.log('AI Settings: enableMedicationSubstitution processed:', loadedSettings.enableMedicationSubstitution);
         
         setSettings(loadedSettings);
         
         // Auto-save if medication substitution was forced to true
         if ((data.settings.enableMedicationSubstitution === false || data.settings.enableMedicationSubstitution === undefined) && loadedSettings.enableMedicationSubstitution === true) {
-          console.log('AI Settings: Auto-saving settings to fix medication substitution...');
           setTimeout(() => {
             handleSave();
           }, 1000);
@@ -78,8 +73,6 @@ export default function AISettingsPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      console.log('Saving AI settings:', settings);
-      
       const response = await fetch('/api/ai/settings', {
         method: 'POST',
         headers: {
@@ -90,15 +83,12 @@ export default function AISettingsPage() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Settings saved successfully:', result);
         showToast('AI settings saved successfully', 'success');
       } else {
         const error = await response.json();
-        console.error('Failed to save settings:', error);
         showToast('Failed to save AI settings', 'error');
       }
     } catch (error) {
-      console.error('Error saving AI settings:', error);
       showToast('Error saving AI settings', 'error');
     } finally {
       setSaving(false);
@@ -139,16 +129,10 @@ export default function AISettingsPage() {
   };
 
   const handleInputChange = (field: keyof AISettings, value: any) => {
-    console.log(`Updating ${field} to:`, value);
-    console.log('Current settings before update:', settings);
-    setSettings(prev => {
-      const newSettings = {
-        ...prev,
-        [field]: value
-      };
-      console.log('New settings state:', newSettings);
-      return newSettings;
-    });
+    setSettings(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   if (loading) {
@@ -302,7 +286,6 @@ export default function AISettingsPage() {
                       type="checkbox"
                       checked={Boolean(settings[feature.key as keyof AISettings])}
                       onChange={(e) => {
-                        console.log(`Checkbox changed for ${feature.key}:`, e.target.checked);
                         handleInputChange(feature.key as keyof AISettings, e.target.checked);
                       }}
                       className="sr-only peer"
@@ -340,14 +323,6 @@ export default function AISettingsPage() {
             </div>
           </div>
 
-          {/* Debug Section - Remove in production */}
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <h3 className="font-semibold text-yellow-800 mb-2">Debug Info (Remove in production)</h3>
-            <div className="text-sm text-yellow-700 space-y-1">
-              <p>enableMedicationSubstitution: {String(settings.enableMedicationSubstitution)}</p>
-              <p>All settings: {JSON.stringify(settings, null, 2)}</p>
-            </div>
-          </div>
 
           {/* Save Button */}
           <div className="flex justify-end">

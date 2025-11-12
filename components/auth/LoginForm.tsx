@@ -28,8 +28,8 @@ export default function LoginForm() {
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: ''
+      email: 'admin@pharmacy.com',
+      password: 'Admin123!'
     }
   });
 
