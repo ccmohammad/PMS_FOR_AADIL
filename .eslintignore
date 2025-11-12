@@ -1,0 +1,22 @@
+# Build outputs
+.next/
+out/
+build/
+dist/
+
+# Node.js
+node_modules/
+
+# Cache
+.cache/
+.eslintcache
+
+# Coverage
+coverage/
+
+# Misc
+.DS_Store
+*.log
+
+# Generated files
+*.generated.* 
