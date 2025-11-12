@@ -153,7 +153,7 @@ export default function SalesPage() {
         const response = await fetch('/api/customers');
         if (response.ok) {
           const data = await response.json();
-          setCustomers(data);
+          setCustomers(data.data);
         }
       } catch (error) {
         console.error('Error fetching customers:', error);
